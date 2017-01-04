@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # setup.py
-# Copyright (C) 2014-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2017 Fracpete (pythonwekawrapper at gmail dot com)
 
 from setuptools import setup
 
@@ -24,9 +24,9 @@ setup(
     "Examples for the python-weka-wrapper3 library. "
     + "Some examples are modelled after the Examples for Weka, located here: "
     + "https://svn.cms.waikato.ac.nz/svn/weka/trunk/wekaexamples/",
-    url="https://github.com/fracpete/python-weka-wrapper-examples",
+    url="https://github.com/fracpete/python-weka-wrapper3-examples",
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Programming Language :: Python :: 3',
@@ -47,6 +47,6 @@ setup(
     author='Peter "fracpete" Reutemann',
     author_email='pythonwekawrapper at gmail dot com',
     install_requires=[
-        "python-weka-wrapper3>=0.1.1",
+        "python-weka-wrapper3>=0.1.2",
     ],
 )
