@@ -12,14 +12,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # helper.py
-# Copyright (C) 2014 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2019 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
+import tempfile
 
 
 def get_data_dir():
     """
     Returns the data directory.
+
     :return: the data directory
     :rtype: str
     """
@@ -31,6 +33,7 @@ def get_data_dir():
 def print_title(title):
     """
     Prints the title underlined.
+
     :param title: the title to print
     :type title: str
     """
@@ -42,8 +45,18 @@ def print_title(title):
 def print_info(info):
     """
     Prints the info.
+
     :param info: the info to print
     :type info: str
     """
 
     print("\n" + info)
+
+
+def get_tmp_dir():
+    """
+    Returns the tmp directory.
+
+    :return: the tmp directory
+    """
+    return tempfile.gettempdir()
