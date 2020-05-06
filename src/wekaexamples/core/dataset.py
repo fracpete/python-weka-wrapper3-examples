@@ -90,6 +90,24 @@ def main():
     combined = Instances.merge_instances(data2, data1)
     print("Combined:\n" + str(combined))
 
+    # subsets
+    helper.print_title("subsets")
+    # select columns by name
+    subset = iris_data.subset(col_names=['sepallength', 'sepalwidth', 'petallength', 'petalwidth'])
+    print("col subset by name", subset.attribute_names(), subset.num_instances)
+
+    # select columns by range (1-based indices)
+    subset = iris_data.subset(col_range='1-3,5')
+    print("col subset by range", subset.attribute_names(), subset.num_instances)
+
+    # select rows by range (1-based indices)
+    subset = iris_data.subset(row_range='51-150')
+    print("row subset by range", subset.attribute_names(), subset.num_instances)
+
+    # invert selection of cols/rows and keep original relation name
+    subset = iris_data.subset(col_range='5', invert_cols=True, row_range='51-150', invert_rows=True, keep_relationame=True)
+    print("col/row subset by range (inverted)", subset.attribute_names(), subset.num_instances)
+
     # load dataset incrementally
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset incrementally: " + iris_file)
