@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # attribute_selection_test.py
-# Copyright (C) 2014 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2020 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import sys
@@ -22,8 +22,8 @@ import wekaexamples.helper as helper
 from weka.core.converters import Loader
 from weka.core.classes import Random
 from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
-from weka.classifiers import Classifier, Evaluation
-from weka.filters import Filter
+from weka.classifiers import Classifier, Evaluation, AttributeSelectedClassifier
+import weka.filters as wfilters
 
 
 def use_classifier(data):
@@ -33,18 +33,20 @@ def use_classifier(data):
     :type data: Instances
     """
     print("\n1. Meta-classifier")
-    classifier = Classifier(classname="weka.classifiers.meta.AttributeSelectedClassifier")
+    classifier = AttributeSelectedClassifier()
     aseval = ASEvaluation(classname="weka.attributeSelection.CfsSubsetEval")
     assearch = ASSearch(classname="weka.attributeSelection.GreedyStepwise", options=["-B"])
     base = Classifier(classname="weka.classifiers.trees.J48")
     # setting nested options is always a bit tricky, getting all the escaped double quotes right
     # simply using the bean property for setting Java objects is often easier and less error prone
-    classifier.set_property("classifier", base.jobject)
-    classifier.set_property("evaluator", aseval.jobject)
-    classifier.set_property("search", assearch.jobject)
+    classifier.classifier = base
+    classifier.evaluator = aseval
+    classifier.search = assearch
     evaluation = Evaluation(data)
     evaluation.crossvalidate_model(classifier, data, 10, Random(1))
     print(evaluation.summary())
+    print("Evaluator:\n", classifier.evaluator)
+    print("Search:\n", classifier.search)
 
 
 def use_filter(data):
@@ -54,14 +56,16 @@ def use_filter(data):
     :type data: Instances
     """
     print("\n2. Filter")
-    flter = Filter(classname="weka.filters.supervised.attribute.AttributeSelection")
+    flter = wfilters.AttributeSelection()
     aseval = ASEvaluation(classname="weka.attributeSelection.CfsSubsetEval")
     assearch = ASSearch(classname="weka.attributeSelection.GreedyStepwise", options=["-B"])
-    flter.set_property("evaluator", aseval.jobject)
-    flter.set_property("search", assearch.jobject)
+    flter.evaluator = aseval
+    flter.search = assearch
     flter.inputformat(data)
     filtered = flter.filter(data)
     print(str(filtered))
+    print("Evaluator:\n", flter.evaluator)
+    print("Search:\n", flter.search)
 
 
 def use_low_level(data):
