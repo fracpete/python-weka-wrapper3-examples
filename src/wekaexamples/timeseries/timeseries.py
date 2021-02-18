@@ -44,11 +44,13 @@ def main():
     helper.print_info("Loading module by name")
     print(TSEvalModule.module("MAE"))
 
-    # build forecaster
+    # evaluate forecaster
     helper.print_title("Evaluate forecaster")
     forecaster = WekaForecaster(options=["-F", "passenger_numbers"])
     forecaster.base_forecaster = Classifier(classname="weka.classifiers.functions.LinearRegression")
-    print(forecaster.to_commandline())
+    print("algorithm name: " + str(forecaster.algorithm_name))
+    print("command-line: " + forecaster.to_commandline())
+
     evaluation = TSEvaluation(airline_data, 0.33)
     evaluation.evaluate_on_training_data = True
     evaluation.evaluate_on_test_data = True
@@ -69,6 +71,40 @@ def main():
     print(evaluation.print_predictions_for_test_data("Predictions (test)", "passenger_numbers", evaluation.horizon - 1))
     # for module in evaluation.evaluation_modules:
     #     print(module.eval_name + ": " + str(module.target_fields))
+
+    # build forecaster
+    helper.print_title("Build/use forecaster")
+    airline_train, airline_test = airline_data.train_test_split(66)
+    forecaster = WekaForecaster(options=["-F", "passenger_numbers"])
+    forecaster.base_forecaster = Classifier(classname="weka.classifiers.functions.LinearRegression")
+    forecaster.fields_to_forecast = "passenger_numbers"
+    forecaster.build_forecaster(airline_train)
+    forecaster.prime_forecaster(airline_test)
+    steps = forecaster.forecast(10)
+    for i, step in enumerate(steps):
+        print("Step #" + str(i+1) + ": " + str(step))
+
+    # serialization (if supported)
+    helper.print_title("Serialization")
+    if forecaster.base_model_has_serializer:
+        model_file = helper.get_tmp_dir() + "/base.model"
+        forecaster.save_base_model(model_file)
+        forecaster2 = WekaForecaster(options=["-F", "passenger_numbers"])
+        forecaster2.load_base_model(model_file)
+        print(forecaster2)
+    else:
+        print("Base model has no serializer, skipping serialization I/O")
+
+    # state management
+    helper.print_title("State")
+    if forecaster.uses_state:
+        state_file = helper.get_tmp_dir() + "/state.ser"
+        forecaster.serialize_state(state_file)
+        forecaster2 = WekaForecaster(options=["-F", "passenger_numbers"])
+        forecaster2.load_serialized_state(state_file)
+        print(forecaster2)
+    else:
+        print("Forecaster does not use state, skipping state I/O")
 
 
 if __name__ == "__main__":
