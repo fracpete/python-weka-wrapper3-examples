@@ -43,10 +43,10 @@ setup(
         "wekaexamples.classifiers",
         "wekaexamples.core"
     ],
-    version="0.1.0",
+    version="0.2.0",
     author='Peter "fracpete" Reutemann',
     author_email='pythonwekawrapper at gmail dot com',
     install_requires=[
-        "python-weka-wrapper3>=0.1.14",
+        "python-weka-wrapper3>=0.2.0",
     ],
 )
