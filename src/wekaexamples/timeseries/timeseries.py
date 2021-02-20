@@ -19,7 +19,8 @@ import traceback
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
 from weka.core.converters import Loader
-from weka.timeseries import TSForecaster, TSEvaluation, TSEvalModule, WekaForecaster
+from weka.core.dataset import Instances
+from weka.timeseries import TSEvaluation, TSEvalModule, WekaForecaster
 from weka.classifiers import Classifier
 
 
@@ -46,50 +47,76 @@ def main():
 
     # evaluate forecaster
     helper.print_title("Evaluate forecaster")
-    forecaster = WekaForecaster(options=["-F", "passenger_numbers"])
+    forecaster = WekaForecaster()
+    forecaster.fields_to_forecast = ["passenger_numbers"]
     forecaster.base_forecaster = Classifier(classname="weka.classifiers.functions.LinearRegression")
+    forecaster.tslag_maker.timestamp_field = "Date"
+    forecaster.tslag_maker.adjust_for_variance = False
+    forecaster.tslag_maker.include_powers_of_time = True
+    forecaster.tslag_maker.include_timelag_products = True
+    forecaster.tslag_maker.remove_leading_instances_with_unknown_lag_values = False
+    forecaster.tslag_maker.add_month_of_year = True
+    forecaster.tslag_maker.add_quarter_of_year = True
     print("algorithm name: " + str(forecaster.algorithm_name))
     print("command-line: " + forecaster.to_commandline())
+    print("lag maker: " + forecaster.tslag_maker.to_commandline())
 
-    evaluation = TSEvaluation(airline_data, 0.33)
-    evaluation.evaluate_on_training_data = True
-    evaluation.evaluate_on_test_data = True
-    evaluation.prime_window_size = 10
+    evaluation = TSEvaluation(airline_data, 0.0)
+    evaluation.evaluate_on_training_data = False
+    evaluation.evaluate_on_test_data = False
+    evaluation.prime_window_size = forecaster.tslag_maker.max_lag
     evaluation.prime_for_test_data_with_test_data = True
     evaluation.rebuild_model_after_each_test_forecast_step = False
     evaluation.forecast_future = True
-    evaluation.horizon = 5
+    evaluation.horizon = 20
     evaluation.evaluation_modules = "MAE,RMSE"
     evaluation.evaluate(forecaster)
     print(evaluation)
-    print(evaluation.summary())
-    print("Predictions (training data): " + evaluation.predictions_for_training_data(evaluation.horizon - 1).summary)
-    print("Predictions (test data): " + evaluation.predictions_for_test_data(evaluation.horizon - 1).summary)
-    print("Future forecasts (training)\n" + evaluation.print_future_forecast_on_training_data(forecaster))
-    print("Future forecasts (test)\n" + evaluation.print_future_forecast_on_test_data(forecaster))
-    print(evaluation.print_predictions_for_training_data("Predictions (training)", "passenger_numbers", evaluation.horizon - 1))
-    print(evaluation.print_predictions_for_test_data("Predictions (test)", "passenger_numbers", evaluation.horizon - 1))
-    # for module in evaluation.evaluation_modules:
-    #     print(module.eval_name + ": " + str(module.target_fields))
+    if evaluation.evaluate_on_training_data or evaluation.evaluate_on_test_data:
+        print(evaluation.summary())
+    if evaluation.evaluate_on_training_data:
+        print("Predictions (training data): " + evaluation.predictions_for_training_data(1).summary)
+    if evaluation.evaluate_on_test_data:
+        print("Predictions (test data): " + evaluation.predictions_for_test_data(1).summary)
+        preds = evaluation.predictions_for_test_data(1)
+        print("Counts for targets: " + str(preds.counts_for_targets()))
+        print("Errors for target 'passenger_numbers': " + str(preds.errors_for_target("passenger_numbers")))
+        print("Errors for all targets: " + str(preds.predictions_for_all_targets()))
+    if evaluation.training_data is not None:
+        print("Future forecasts (training)\n" + evaluation.print_future_forecast_on_training_data(forecaster))
+    if evaluation.test_data is not None:
+        print("Future forecasts (test)\n" + evaluation.print_future_forecast_on_test_data(forecaster))
+    if evaluation.evaluate_on_training_data:
+        print(evaluation.print_predictions_for_training_data("Predictions (training)", "passenger_numbers", 1))
+    if evaluation.evaluate_on_test_data:
+        print(evaluation.print_predictions_for_test_data("Predictions (test)", "passenger_numbers", 1))
 
     # build forecaster
     helper.print_title("Build/use forecaster")
-    airline_train, airline_test = airline_data.train_test_split(66)
-    forecaster = WekaForecaster(options=["-F", "passenger_numbers"])
+    airline_train, airline_test = airline_data.train_test_split(90.0)
+    forecaster = WekaForecaster()
+    forecaster.fields_to_forecast = ["passenger_numbers"]
     forecaster.base_forecaster = Classifier(classname="weka.classifiers.functions.LinearRegression")
     forecaster.fields_to_forecast = "passenger_numbers"
     forecaster.build_forecaster(airline_train)
-    forecaster.prime_forecaster(airline_test)
-    steps = forecaster.forecast(10)
-    for i, step in enumerate(steps):
-        print("Step #" + str(i+1) + ": " + str(step))
+    num_prime_instances = 12
+    airline_prime = Instances.copy_instances(airline_train, airline_train.num_instances - num_prime_instances, num_prime_instances)
+    forecaster.prime_forecaster(airline_prime)
+    num_future_forecasts = airline_test.num_instances
+    preds = forecaster.forecast(num_future_forecasts)
+    print("Actual,Predicted,Error")
+    for i in range(num_future_forecasts):
+        actual = airline_test.get_instance(i).get_value(0)
+        predicted = preds[i][0].predicted
+        error = actual - predicted
+        print("%f,%f,%f" % (actual, predicted, error))
 
     # serialization (if supported)
     helper.print_title("Serialization")
     if forecaster.base_model_has_serializer:
         model_file = helper.get_tmp_dir() + "/base.model"
         forecaster.save_base_model(model_file)
-        forecaster2 = WekaForecaster(options=["-F", "passenger_numbers"])
+        forecaster2 = WekaForecaster()
         forecaster2.load_base_model(model_file)
         print(forecaster2)
     else:
@@ -100,7 +127,7 @@ def main():
     if forecaster.uses_state:
         state_file = helper.get_tmp_dir() + "/state.ser"
         forecaster.serialize_state(state_file)
-        forecaster2 = WekaForecaster(options=["-F", "passenger_numbers"])
+        forecaster2 = WekaForecaster()
         forecaster2.load_serialized_state(state_file)
         print(forecaster2)
     else:
@@ -109,7 +136,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        jvm.start(system_info=True, packages=True)
+        jvm.start(packages=True)
         main()
     except Exception as e:
         print(traceback.format_exc())
