@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # attribute_selection.py
-# Copyright (C) 2014-2019 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2021 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import traceback
@@ -63,6 +63,19 @@ def main():
     attsel.select_attributes(anneal_data)
     print("ranked attributes:\n" + str(attsel.ranked_attributes))
     print("result string:\n" + attsel.results_string)
+
+    # transform data
+    helper.print_title("Transform data")
+    search = ASSearch(classname="weka.attributeSelection.Ranker", options=["-N", "-1"])
+    evaluation = ASEvaluation(classname="weka.attributeSelection.PrincipalComponents", options=[])
+    attsel = AttributeSelection()
+    attsel.search(search)
+    attsel.evaluator(evaluation)
+    attsel.select_attributes(anneal_data)
+    print("transformed header:\n" + str(evaluation.transformed_header()))
+    print("\ntransformed data:\n" + str(evaluation.transformed_data(anneal_data)))
+    print("\nconvert instance:\n" + str(evaluation.convert_instance(anneal_data.get_instance(0))))
+
 
 if __name__ == "__main__":
     try:
