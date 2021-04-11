@@ -12,9 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # serialization.py
-# Copyright (C) 2014-2019 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2021 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
+import pickle
 import tempfile
 import traceback
 import javabridge
@@ -23,7 +24,7 @@ import wekaexamples.helper as helper
 from weka.core.converters import Loader
 from weka.core.dataset import Instances
 from weka.classifiers import Classifier
-import weka.core.serialization as serialization
+from weka.core.classes import serialization_read, serialization_write, serialization_read_all, serialization_write_all
 
 
 def main():
@@ -45,14 +46,14 @@ def main():
     # save and read object
     helper.print_title("I/O: model (using serialization module)")
     outfile = tempfile.gettempdir() + os.sep + "j48.model"
-    serialization.write(outfile, classifier)
-    model = Classifier(jobject=serialization.read(outfile))
+    serialization_write(outfile, classifier)
+    model = Classifier(jobject=serialization_read(outfile))
     print(model)
 
     # save classifier and dataset header (multiple objects)
     helper.print_title("I/O: model and header (using serialization module)")
-    serialization.write_all(outfile, [classifier, Instances.template_instances(iris_data)])
-    objects = serialization.read_all(outfile)
+    serialization_write_all(outfile, [classifier, Instances.template_instances(iris_data)])
+    objects = serialization_read_all(outfile)
     for i, obj in enumerate(objects):
         helper.print_info("Object #" + str(i+1) + ":")
         if javabridge.get_env().is_instance_of(obj, javabridge.get_env().find_class("weka/core/Instances")):
@@ -75,6 +76,18 @@ def main():
     print(model)
     if header is not None:
         print(header)
+
+    # using pickle
+    helper.print_title("I/O: using pickle to save/load model")
+    classifier = Classifier("weka.classifiers.trees.J48")
+    classifier.build_classifier(iris_data)
+    outfile = tempfile.gettempdir() + os.sep + "j48-pickle.model"
+    with open(outfile, "wb") as of:
+        pickle.dump(classifier, of)
+    with open(outfile, "rb") as of:
+        classifier2 = pickle.load(of)
+    print(classifier2)
+    print(classifier2.header)
 
 
 if __name__ == "__main__":
