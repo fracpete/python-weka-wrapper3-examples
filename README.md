@@ -16,6 +16,10 @@ Requirements:
 The Python libraries you can either install using `pip install <name>` or use
 pre-built packages available for your platform.
 
+## COLAB
+
+For some COLAB examples, see the [COLAB document](COLAB.md).
+
 
 ## Forum
 
