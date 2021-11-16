@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # experiments.py
-# Copyright (C) 2014-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2021 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import tempfile
@@ -89,7 +89,9 @@ def main():
     print(tester.multi_resultset_full(0, comparison_col))
 
     # plot
-    plot_exp.plot_experiment(matrix, title="Random split", measure="Correlation coefficient", wait=True)
+    plot_exp.plot_experiment(matrix, title="Random split", measure="Correlation coefficient",
+                             show_stdev=True, wait=True)
+
 
 if __name__ == "__main__":
     try:
