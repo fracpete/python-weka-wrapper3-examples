@@ -12,10 +12,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # parameter_optimization.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2021 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
-import sys
 import traceback
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
@@ -68,19 +67,17 @@ def multisearch():
     train.class_is_last()
 
     # classifier
-    multi = MultiSearch(
-        options=["-sample-size", "100.0", "-initial-folds", "2", "-subsequent-folds", "2",
-                 "-num-slots", "1", "-S", "1"])
+    multi = MultiSearch(options=["-S", "1"])
     multi.evaluation = "CC"
     mparam = MathParameter()
-    mparam.prop = "classifier.kernel.gamma"
+    mparam.prop = "kernel.gamma"
     mparam.minimum = -3.0
     mparam.maximum = 3.0
     mparam.step = 1.0
     mparam.base = 10.0
     mparam.expression = "pow(BASE,I)"
     lparam = ListParameter()
-    lparam.prop = "classifier.C"
+    lparam.prop = "C"
     lparam.values = ["-2.0", "-1.0", "0.0", "1.0", "2.0"]
     multi.parameters = [mparam, lparam]
     cls = Classifier(
@@ -96,7 +93,7 @@ def main():
     """
     Calls the parameter optimization method(s).
     """
-    #gridsearch()
+    gridsearch()
     multisearch()
 
 
