@@ -8,7 +8,7 @@ Use the following minimal instructions to install python-weka-wrapper3 in a COLA
 
 ```
 !pip install numpy
-!pip install javabridge
+!pip install python-javabridge
 !pip install python-weka-wrapper3
 ```
 
