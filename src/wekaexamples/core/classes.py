@@ -17,7 +17,7 @@
 import traceback
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
-from weka.core.classes import Random, SingleIndex, Range, Tag, SelectedTag, JavaObject
+from weka.core.classes import Random, SingleIndex, Range, Tag, JavaObject
 
 
 def main():
@@ -91,6 +91,7 @@ def main():
     print("tag=" + str(tag) + ", ident=" + str(tag.ident) + ", readable=" + tag.readable)
     tag = Tag(ident=2, ident_str="two", readable="2nd tag")
     print("tag=" + str(tag) + ", ident=" + str(tag.ident) + ", readable=" + tag.readable)
+
 
 if __name__ == "__main__":
     try:
