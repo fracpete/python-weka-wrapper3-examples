@@ -18,6 +18,7 @@ import os
 import traceback
 from random import randint
 import weka.core.jvm as jvm
+from weka.core.classes import Random
 import wekaexamples.helper as helper
 from weka.core.converters import Loader
 import weka.core.dataset as ds
@@ -222,6 +223,18 @@ def main():
     iris_data = loader.load_file(iris_file)
     iris_data.class_is_last()
     pld.matrix_plot(iris_data, percent=50, title="Matrix plot iris", wait=True)
+
+    # create cross-validation splits
+    helper.print_title("Cross-validation splits")
+    iris_data = loader.load_file(iris_file)
+    iris_data.class_is_last()
+    cv_splits = iris_data.cv_splits(3, rnd=Random(1), stratify=True)
+    for i, cv_split in enumerate(cv_splits):
+        helper.print_info("--> Split %d" % (i+1))
+        print("\ntrain")
+        print(cv_split[0])
+        print("\ntest")
+        print(cv_split[1])
 
 
 if __name__ == "__main__":
