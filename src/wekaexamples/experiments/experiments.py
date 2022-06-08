@@ -43,7 +43,9 @@ def main():
         folds=10,
         datasets=datasets,
         classifiers=classifiers,
-        result=outfile)
+        result=outfile,
+        pred_target_column=True,    # outputting predictions and ground truth in separate columns (CAUTION: output can get very large!)
+        class_for_ir_statistics=1)  # using 2nd class label for AUC
     exp.setup()
     exp.run()
 
@@ -56,7 +58,7 @@ def main():
     tester = Tester(classname="weka.experiment.PairedCorrectedTTester")
     tester.swap_rows_and_cols = True
     tester.resultmatrix = matrix
-    comparison_col = data.attribute_by_name("Percent_correct").index
+    comparison_col = data.attribute_by_name("Area_under_ROC").index
     tester.instances = data
     print(tester.header(comparison_col))
     print(tester.multi_resultset_full(0, comparison_col))
