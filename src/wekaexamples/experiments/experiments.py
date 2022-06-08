@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # experiments.py
-# Copyright (C) 2014-2021 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2022 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import tempfile
@@ -35,7 +35,7 @@ def main():
     # cross-validation + classification
     helper.print_title("Experiment: Cross-validation + classification")
     datasets = [helper.get_data_dir() + os.sep + "iris.arff", helper.get_data_dir() + os.sep + "anneal.arff"]
-    classifiers = [Classifier("weka.classifiers.rules.ZeroR"), Classifier("weka.classifiers.trees.J48")]
+    classifiers = [Classifier(classname="weka.classifiers.rules.ZeroR"), Classifier(classname="weka.classifiers.trees.J48")]
     outfile = tempfile.gettempdir() + os.sep + "results-cv.arff"
     exp = SimpleCrossValidationExperiment(
         classification=True,
@@ -51,10 +51,18 @@ def main():
     loader = converters.loader_for_file(outfile)
     data = loader.load_file(outfile)
     matrix = ResultMatrix("weka.experiment.ResultMatrixPlainText")
-    tester = Tester("weka.experiment.PairedCorrectedTTester")
+    # comparing datasets
+    helper.print_info("Comparing datasets")
+    tester = Tester(classname="weka.experiment.PairedCorrectedTTester")
+    tester.swap_rows_and_cols = True
     tester.resultmatrix = matrix
     comparison_col = data.attribute_by_name("Percent_correct").index
     tester.instances = data
+    print(tester.header(comparison_col))
+    print(tester.multi_resultset_full(0, comparison_col))
+    # comparing classifiers
+    helper.print_info("Comparing classifiers")
+    tester.swap_rows_and_cols = False
     print(tester.header(comparison_col))
     print(tester.multi_resultset_full(0, comparison_col))
 
@@ -62,8 +70,8 @@ def main():
     helper.print_title("Experiment: Random split + regression")
     datasets = [helper.get_data_dir() + os.sep + "bolts.arff", helper.get_data_dir() + os.sep + "bodyfat.arff"]
     classifiers = [
-        Classifier("weka.classifiers.rules.ZeroR"),
-        Classifier("weka.classifiers.functions.LinearRegression")
+        Classifier(classname="weka.classifiers.rules.ZeroR"),
+        Classifier(classname="weka.classifiers.functions.LinearRegression")
     ]
     outfile = tempfile.gettempdir() + os.sep + "results-rs.arff"
     exp = SimpleRandomSplitExperiment(
@@ -80,11 +88,19 @@ def main():
     # evaluate
     loader = converters.loader_for_file(outfile)
     data = loader.load_file(outfile)
-    matrix = ResultMatrix("weka.experiment.ResultMatrixPlainText")
-    tester = Tester("weka.experiment.PairedCorrectedTTester")
+    matrix = ResultMatrix(classname="weka.experiment.ResultMatrixPlainText")
+    # comparing datasets
+    helper.print_info("Comparing datasets")
+    tester = Tester(classname="weka.experiment.PairedCorrectedTTester")
+    tester.swap_rows_and_cols = True
     tester.resultmatrix = matrix
     comparison_col = data.attribute_by_name("Correlation_coefficient").index
     tester.instances = data
+    print(tester.header(comparison_col))
+    print(tester.multi_resultset_full(0, comparison_col))
+    # comparing classifiers
+    helper.print_info("Comparing classifiers")
+    tester.swap_rows_and_cols = False
     print(tester.header(comparison_col))
     print(tester.multi_resultset_full(0, comparison_col))
 
