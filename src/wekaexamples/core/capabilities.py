@@ -29,7 +29,7 @@ def main():
     Just runs some example code.
     """
 
-    classifier = Classifier("weka.classifiers.trees.J48")
+    classifier = Classifier(classname="weka.classifiers.trees.J48")
 
     helper.print_title("Capabilities")
     capabilities = classifier.capabilities
@@ -38,7 +38,7 @@ def main():
     # load a dataset
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_data = loader.load_file(iris_file)
     iris_data.class_is_last()
     data_capabilities = Capabilities.for_instances(iris_data)

@@ -33,7 +33,7 @@ def main():
     # load a dataset
     iris = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(iris)
 
     # remove class attribute
@@ -62,7 +62,7 @@ def main():
     # load text dataset
     text = helper.get_data_dir() + os.sep + "reutersTop10Randomized_1perc_shortened.arff"
     helper.print_info("Loading dataset: " + text)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(text)
     data.class_is_last()
 
@@ -92,12 +92,13 @@ def main():
     helper.print_info("Generate source code")
     bolts = helper.get_data_dir() + os.sep + "labor.arff"
     helper.print_info("Loading dataset: " + bolts)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(bolts)
     replace = Filter(classname="weka.filters.unsupervised.attribute.ReplaceMissingValues")
     replace.inputformat(data)
     replace.filter(data)
     print(replace.to_source("MyReplaceMissingValues", data))
+
 
 if __name__ == "__main__":
     try:

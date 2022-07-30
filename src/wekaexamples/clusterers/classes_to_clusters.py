@@ -30,7 +30,7 @@ def main():
     # load a dataset
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     full = loader.load_file(iris_file)
     full.class_is_last()
 

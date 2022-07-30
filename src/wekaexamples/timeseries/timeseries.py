@@ -32,7 +32,7 @@ def main():
     # load a dataset
     airline_file = helper.get_data_dir() + os.sep + "airline.arff"
     helper.print_info("Loading dataset: " + airline_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     airline_data = loader.load_file(airline_file)
     airline_data.class_is_last()
 

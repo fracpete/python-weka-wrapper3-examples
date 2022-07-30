@@ -37,7 +37,7 @@ def main():
     # load a dataset
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_data = loader.load_file(iris_file)
     iris_data.class_is_last()
     helper.print_title("Iris dataset")
@@ -112,7 +112,7 @@ def main():
     # load dataset incrementally
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset incrementally: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_data = loader.load_file(iris_file, incremental=True)
     iris_data.class_is_last()
     helper.print_title("Iris dataset")
@@ -194,7 +194,7 @@ def main():
     # create more sparse instances
     diabetes_file = helper.get_data_dir() + os.sep + "diabetes.arff"
     helper.print_info("Loading dataset: " + diabetes_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     diabetes_data = loader.load_file(diabetes_file)
     diabetes_data.class_is_last()
     helper.print_title("Create sparse instances using template dataset")

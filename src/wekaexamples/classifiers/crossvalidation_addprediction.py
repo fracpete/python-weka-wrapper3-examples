@@ -33,7 +33,7 @@ def main():
     # load a dataset
     data_file = helper.get_data_dir() + os.sep + "vote.arff"
     helper.print_info("Loading dataset: " + data_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(data_file)
     data.class_is_last()
 

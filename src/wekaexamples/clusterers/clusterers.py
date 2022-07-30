@@ -33,7 +33,7 @@ def main():
     # load a dataset
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(iris_file)
 
     # remove class attribute
@@ -55,7 +55,7 @@ def main():
 
     # using a filtered clusterer
     helper.print_title("Filtered clusterer")
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(iris_file)
     clusterer = Clusterer(classname="weka.clusterers.SimpleKMeans", options=["-N", "3"])
     remove = Filter(classname="weka.filters.unsupervised.attribute.Remove", options=["-R", "last"])
@@ -67,7 +67,7 @@ def main():
 
     # load a dataset incrementally and build clusterer incrementally
     helper.print_title("Incremental clusterer")
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_inc = loader.load_file(iris_file, incremental=True)
     clusterer = Clusterer("weka.clusterers.Cobweb")
     remove = Filter(classname="weka.filters.unsupervised.attribute.Remove", options=["-R", "last"])

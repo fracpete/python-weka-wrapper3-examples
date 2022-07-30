@@ -47,6 +47,7 @@ def main():
         data = loader.load()
         print(unicode(data))
 
+
 if __name__ == "__main__":
     try:
         jvm.start()

@@ -38,7 +38,7 @@ def main(args):
     else:
         data_file = args[1]
     helper.print_info("Loading dataset: " + data_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     data = loader.load_file(data_file)
     data.class_is_last()
 

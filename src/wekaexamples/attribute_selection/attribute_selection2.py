@@ -33,7 +33,7 @@ def main():
     # load a dataset
     anneal_file = helper.get_data_dir() + os.sep + "anneal.arff"
     helper.print_info("Loading dataset: " + anneal_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     anneal_data = loader.load_file(anneal_file)
     anneal_data.class_is_last()
 

@@ -35,12 +35,12 @@ def main():
     # load a dataset
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_data = loader.load_file(iris_file)
     iris_data.class_is_last()
 
     # train classifier
-    classifier = Classifier("weka.classifiers.trees.J48")
+    classifier = Classifier(classname="weka.classifiers.trees.J48")
     classifier.build_classifier(iris_data)
 
     # save and read object
@@ -79,7 +79,7 @@ def main():
 
     # using pickle
     helper.print_title("I/O: using pickle to save/load model")
-    classifier = Classifier("weka.classifiers.trees.J48")
+    classifier = Classifier(classname="weka.classifiers.trees.J48")
     classifier.build_classifier(iris_data)
     outfile = tempfile.gettempdir() + os.sep + "j48-pickle.model"
     with open(outfile, "wb") as of:

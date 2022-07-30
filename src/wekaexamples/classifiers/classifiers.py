@@ -37,7 +37,7 @@ def main():
     # load a dataset
     iris_file = helper.get_data_dir() + os.sep + "iris.arff"
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_data = loader.load_file(iris_file)
     iris_data.class_is_last()
 
@@ -100,7 +100,7 @@ def main():
     # load a dataset incrementally and build classifier incrementally
     helper.print_title("Build classifier incrementally on iris")
     helper.print_info("Loading dataset: " + iris_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     iris_inc = loader.load_file(iris_file, incremental=True)
     iris_inc.class_is_last()
     classifier = Classifier(classname="weka.classifiers.bayes.NaiveBayesUpdateable")
@@ -115,7 +115,7 @@ def main():
     print("generic FilteredClassifier instantiation")
     meta = SingleClassifierEnhancer(classname="weka.classifiers.meta.FilteredClassifier")
     meta.classifier = Classifier(classname="weka.classifiers.functions.LinearRegression")
-    flter = Filter("weka.filters.unsupervised.attribute.Remove")
+    flter = Filter(classname="weka.filters.unsupervised.attribute.Remove")
     flter.options = ["-R", "first"]
     meta.set_property("filter", flter.jobject)
     print(meta.to_commandline())
@@ -123,7 +123,7 @@ def main():
     print("direct FilteredClassifier instantiation")
     meta = FilteredClassifier()
     meta.classifier = Classifier(classname="weka.classifiers.functions.LinearRegression")
-    flter = Filter("weka.filters.unsupervised.attribute.Remove")
+    flter = Filter(classname="weka.filters.unsupervised.attribute.Remove")
     flter.options = ["-R", "first"]
     meta.filter = flter
     print(meta.to_commandline())
@@ -141,7 +141,7 @@ def main():
     helper.print_title("Cross-validating NaiveBayes on diabetes")
     diabetes_file = helper.get_data_dir() + os.sep + "diabetes.arff"
     helper.print_info("Loading dataset: " + diabetes_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     diabetes_data = loader.load_file(diabetes_file)
     diabetes_data.class_is_last()
     classifier = Classifier(classname="weka.classifiers.bayes.NaiveBayes")
@@ -223,7 +223,7 @@ def main():
     # load a numeric dataset
     bolts_file = helper.get_data_dir() + os.sep + "bolts.arff"
     helper.print_info("Loading dataset: " + bolts_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     bolts_data = loader.load_file(bolts_file)
     bolts_data.class_is_last()
 
@@ -264,7 +264,7 @@ def main():
     # access classifier's Java API
     labor_file = helper.get_data_dir() + os.sep + "labor.arff"
     helper.print_info("Loading dataset: " + labor_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     labor_data = loader.load_file(labor_file)
     labor_data.class_is_last()
 

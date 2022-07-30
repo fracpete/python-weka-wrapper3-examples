@@ -30,7 +30,7 @@ def main():
     # load a dataset
     bodyfat_file = helper.get_data_dir() + os.sep + "bodyfat.arff"
     helper.print_info("Loading dataset: " + bodyfat_file)
-    loader = Loader("weka.core.converters.ArffLoader")
+    loader = Loader(classname="weka.core.converters.ArffLoader")
     bodyfat_data = loader.load_file(bodyfat_file)
     bodyfat_data.class_is_last()
 
