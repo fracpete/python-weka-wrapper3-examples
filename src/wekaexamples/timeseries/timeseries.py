@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # timeseries.py
-# Copyright (C) 2021 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2021-2022 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import traceback
@@ -22,6 +22,7 @@ from weka.core.converters import Loader
 from weka.core.dataset import Instances
 from weka.timeseries import TSEvaluation, TSEvalModule, WekaForecaster
 from weka.classifiers import Classifier
+from weka.core.classes import serialization_write, serialization_read
 
 
 def main():
@@ -113,25 +114,31 @@ def main():
 
     # serialization (if supported)
     helper.print_title("Serialization")
+    model_file = helper.get_tmp_dir() + "/base.model"
     if forecaster.base_model_has_serializer:
-        model_file = helper.get_tmp_dir() + "/base.model"
         forecaster.save_base_model(model_file)
         forecaster2 = WekaForecaster()
         forecaster2.load_base_model(model_file)
-        print(forecaster2)
+        print(forecaster2.to_commandline())
     else:
-        print("Base model has no serializer, skipping serialization I/O")
+        print("Base model has no serializer, falling back to generic serialization")
+        serialization_write(model_file, forecaster.base_forecaster)
+        cls = Classifier(jobject=serialization_read(model_file))
+        print(cls.to_commandline())
 
     # state management
     helper.print_title("State")
+    model_file = helper.get_tmp_dir() + "/state.ser"
     if forecaster.uses_state:
-        state_file = helper.get_tmp_dir() + "/state.ser"
-        forecaster.serialize_state(state_file)
+        forecaster.serialize_state(model_file)
         forecaster2 = WekaForecaster()
-        forecaster2.load_serialized_state(state_file)
-        print(forecaster2)
+        forecaster2.load_serialized_state(model_file)
+        print(forecaster2.to_commandline())
     else:
-        print("Forecaster does not use state, skipping state I/O")
+        print("Forecaster does not use state, falling back to generic serialization")
+        serialization_write(model_file, forecaster)
+        forecaster2 = WekaForecaster(jobject=serialization_read(model_file))
+        print(forecaster2.to_commandline())
 
 
 if __name__ == "__main__":
