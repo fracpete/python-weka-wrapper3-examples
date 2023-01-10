@@ -12,17 +12,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # build_evaluate_classifier.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2023 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import traceback
+
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
+from simflow.control import Flow, ContainerValuePicker, Trigger, run_flow
+from simflow.sink import Console
+from simflow.source import FileSupplier, Start, GetStorageValue
 from weka.classifiers import Classifier
-from weka.flow.control import Flow, ContainerValuePicker, Trigger
-from weka.flow.source import FileSupplier, Start, GetStorageValue
 from weka.flow.transformer import LoadDataset, ClassSelector, Train, Evaluate, SetStorageValue, EvaluationSummary
-from weka.flow.sink import Console
 
 
 def main():
@@ -90,16 +91,8 @@ def main():
     evaluate.actors.append(console)
 
     # run the flow
-    msg = flow.setup()
-    if msg is None:
-        print("\n" + flow.tree + "\n")
-        msg = flow.execute()
-        if msg is not None:
-            print("Error executing flow:\n" + msg)
-    else:
-        print("Error setting up flow:\n" + msg)
-    flow.wrapup()
-    flow.cleanup()
+    run_flow(flow, print_tree=True, cleanup=True)
+
 
 if __name__ == "__main__":
     try:

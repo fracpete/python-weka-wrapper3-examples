@@ -12,19 +12,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # load_save_flow.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2023 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
-import traceback
 import tempfile
+import traceback
+
+import simflow.conversion as conversion
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
-from weka.flow.control import Flow, Tee
-from weka.flow.source import ListFiles
-from weka.flow.sink import Console
-from weka.flow.transformer import Convert, LoadDataset, CrossValidate, EvaluationSummary
-import weka.flow.conversion as conversion
+from simflow.control import Flow, Tee, run_flow
+from simflow.sink import Console
+from simflow.source import ListFiles
+from simflow.transformer import Convert
 from weka.classifiers import Classifier
+from weka.flow.transformer import LoadDataset, CrossValidate, EvaluationSummary
 
 
 def main():
@@ -80,6 +82,7 @@ def main():
     # output flow
     fl2.setup()
     print("\n" + fl2.tree + "\n")
+
 
 if __name__ == "__main__":
     try:

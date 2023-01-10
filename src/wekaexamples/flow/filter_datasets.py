@@ -12,17 +12,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # filter_datasets.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2023 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import traceback
+
 import weka.core.jvm as jvm
-import wekaexamples.helper as helper
 import weka.filters as filters
-from weka.flow.control import Flow
-from weka.flow.source import FileSupplier
+import wekaexamples.helper as helper
+from simflow.control import Flow, run_flow
+from simflow.sink import Console
+from simflow.source import FileSupplier
 from weka.flow.transformer import LoadDataset, Filter
-from weka.flow.sink import Console
 
 
 def batch_mode():
@@ -57,16 +58,7 @@ def batch_mode():
     flow.actors.append(console)
 
     # run the flow
-    msg = flow.setup()
-    if msg is None:
-        print("\n" + flow.tree + "\n")
-        msg = flow.execute()
-        if msg is not None:
-            print("Error executing flow:\n" + msg)
-    else:
-        print("Error setting up flow:\n" + msg)
-    flow.wrapup()
-    flow.cleanup()
+    run_flow(flow, print_tree=True, cleanup=True)
 
 
 def incremental():
@@ -102,21 +94,13 @@ def incremental():
     flow.actors.append(console)
 
     # run the flow
-    msg = flow.setup()
-    if msg is None:
-        print("\n" + flow.tree + "\n")
-        msg = flow.execute()
-        if msg is not None:
-            print("Error executing flow:\n" + msg)
-    else:
-        print("Error setting up flow:\n" + msg)
-    flow.wrapup()
-    flow.cleanup()
+    run_flow(flow, print_tree=True, cleanup=True)
 
 
 def main():
     batch_mode()
     incremental()
+
 
 if __name__ == "__main__":
     try:

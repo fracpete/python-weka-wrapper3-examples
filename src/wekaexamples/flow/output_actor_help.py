@@ -12,9 +12,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # output_actor_help.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2023 Fracpete (pythonwekawrapper at gmail dot com)
 
 import traceback
+
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
 from weka.classifiers import Classifier
@@ -32,6 +33,7 @@ def main():
     cv = CrossValidate()
     cv.config["setup"] = Classifier(classname="weka.classifiers.trees.J48")
     cv.print_help()
+
 
 if __name__ == "__main__":
     try:

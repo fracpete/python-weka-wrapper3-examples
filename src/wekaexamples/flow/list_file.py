@@ -12,14 +12,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # list_files.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2023 Fracpete (pythonwekawrapper at gmail dot com)
 
-import traceback
 import tempfile
+import traceback
+
 import weka.core.jvm as jvm
-from weka.flow.control import Flow
-from weka.flow.source import ListFiles
-from weka.flow.sink import Console
+from simflow.control import Flow, run_flow
+from simflow.sink import Console
+from simflow.source import ListFiles
 
 
 def main():
@@ -29,7 +30,6 @@ def main():
 
     # setup the flow
     flow = Flow(name="list files")
-    # flow.print_help()
 
     listfiles = ListFiles()
     listfiles.config["dir"] = str(tempfile.gettempdir())
@@ -37,25 +37,15 @@ def main():
     listfiles.config["list_dirs"] = False
     listfiles.config["recursive"] = False
     listfiles.config["regexp"] = ".*r.*"
-    # listfiles.print_help()
     flow.actors.append(listfiles)
 
     console = Console()
     console.config["prefix"] = "Match: "
-    # console.print_help()
     flow.actors.append(console)
 
     # run the flow
-    msg = flow.setup()
-    if msg is None:
-        print("\n" + flow.tree + "\n")
-        msg = flow.execute()
-        if msg is not None:
-            print("Error executing flow:\n" + msg)
-    else:
-        print("Error setting up flow:\n" + msg)
-    flow.wrapup()
-    flow.cleanup()
+    run_flow(flow, print_tree=True, cleanup=True)
+
 
 if __name__ == "__main__":
     try:
