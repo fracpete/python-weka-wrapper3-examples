@@ -64,8 +64,7 @@ def main():
     attsel.search(search)
     attsel.evaluator(evaluation)
     attsel.select_attributes(anneal_data)
-    res = attsel.cv_results
-    print("\nrank string:" + res)
+    print("\nrank string:" + attsel.cv_results)
     print("rank dictionary:\n" + str(attsel.rank_results))
 
 
