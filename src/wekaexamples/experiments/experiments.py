@@ -90,7 +90,18 @@ def main():
     # evaluate
     loader = converters.loader_for_file(outfile)
     data = loader.load_file(outfile)
-    matrix = ResultMatrix(classname="weka.experiment.ResultMatrixPlainText")
+    matrix = ResultMatrix(classname="weka.experiment.ResultMatrixPlainText", options=["-print-col-names", "-print-row-names"])
+
+    # comparing classifiers
+    helper.print_info("Comparing classifiers")
+    tester = Tester(classname="weka.experiment.PairedCorrectedTTester")
+    tester.swap_rows_and_cols = False
+    tester.resultmatrix = matrix
+    comparison_col = data.attribute_by_name("Correlation_coefficient").index
+    tester.instances = data
+    print(tester.header(comparison_col))
+    print(tester.multi_resultset_full(0, comparison_col))
+
     # comparing datasets
     helper.print_info("Comparing datasets")
     tester = Tester(classname="weka.experiment.PairedCorrectedTTester")
@@ -100,14 +111,11 @@ def main():
     tester.instances = data
     print(tester.header(comparison_col))
     print(tester.multi_resultset_full(0, comparison_col))
-    # comparing classifiers
-    helper.print_info("Comparing classifiers")
-    tester.swap_rows_and_cols = False
-    print(tester.header(comparison_col))
-    print(tester.multi_resultset_full(0, comparison_col))
 
     # plot
     plot_exp.plot_experiment(matrix, title="Random split", measure="Correlation coefficient",
+                             key_loc="lower left", bbox_to_anchor=(0, 1, 1, 0),
+                             axes_swapped=True,
                              show_stdev=True, wait=True)
 
 
