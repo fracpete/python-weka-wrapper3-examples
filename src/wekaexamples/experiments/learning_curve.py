@@ -76,10 +76,7 @@ def main():
         folds=10,
         datasets=datasets,
         classifiers=classifiers,
-        result=results_file,
-        pred_target_column=True,
-        # outputting predictions and ground truth in separate columns (CAUTION: output can get very large!)
-        class_for_ir_statistics=1)  # using 2nd class label for AUC
+        result=results_file)
 
     # run experiment
     print("Running experiment")
