@@ -12,13 +12,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # converters.py
-# Copyright (C) 2015-2016 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2015-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
 import traceback
 import os
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
-from weka.core.converters import Loader, TextDirectoryLoader
+from weka.core.converters import Loader, TextDirectoryLoader, load_csv_file, load_any_file
+from simple_range import range_indices
+from weka.filters import Filter
 
 
 def main():
@@ -46,6 +48,20 @@ def main():
         loader = TextDirectoryLoader(options=["-dir", text_dir, "-F", "-charset", "UTF-8"])
         data = loader.load()
         print(unicode(data))
+
+    # load any file
+    helper.print_title("Loading a CSV file without specifying loader explicitly")
+    data = load_any_file(helper.get_data_dir() + os.sep + "anneal_weka.csv")
+    print(str(data))
+
+    # load CSV file (without using Weka's CSVLoader)
+    helper.print_title("Loading a CSV file without using Weka's CSVLoader")
+    num_cols = range_indices("4-5,9,33-35", maximum=39)
+    data = load_csv_file(helper.get_data_dir() + os.sep + "anneal_excel.csv", num_cols=num_cols)
+    str_to_nom = Filter(classname="weka.filters.unsupervised.attribute.StringToNominal", options=["-R", "1-3,6-8,10-32,36-39"])
+    str_to_nom.inputformat(data)
+    data = str_to_nom.filter(data)
+    print(str(data))
 
 
 if __name__ == "__main__":
