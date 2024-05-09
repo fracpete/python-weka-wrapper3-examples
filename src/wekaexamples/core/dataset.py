@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # dataset.py
-# Copyright (C) 2014-2022 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import traceback
@@ -169,9 +169,9 @@ def main():
     helper.print_title("Create dataset from mixed lists")
     x = [["TEXT", 1, 1.1], ["XXX", 2, 2.2]]
     y = ["A", "B"]
-    dataset2 = ds.create_instances_from_lists(x, y, name="generated from mixed lists", cols_x=["text", "integer", "float"], col_y="class")
+    dataset2 = ds.create_instances_from_lists(x, y, name="generated from mixed lists", cols_x=["text", "integer", "float"], col_y="class", nominal_x=[0], nominal_y=True)
     print(dataset2)
-    dataset2 = ds.create_instances_from_lists(x, name="generated from mixed lists (no y)", cols_x=["text", "integer", "float"])
+    dataset2 = ds.create_instances_from_lists(x, name="generated from mixed lists (no y)", cols_x=["text", "integer", "float"], nominal_x=[0])
     print(dataset2)
 
     # create dataset (matrices)
@@ -188,7 +188,7 @@ def main():
     helper.print_title("Create dataset from (mixed type) matrix")
     x = np.array([("TEXT", 1, 1.1), ("XXX", 2, 2.2)], dtype='S20, i4, f8')
     y = np.array(["A", "B"], dtype='S20')
-    dataset4 = ds.create_instances_from_matrices(x, y, name="generated from mixed matrices", cols_x=["text", "integer", "float"], col_y="class")
+    dataset4 = ds.create_instances_from_matrices(x, y, name="generated from mixed matrices", cols_x=["text", "integer", "float"], col_y="class", nominal_x=[0], nominal_y=True)
     print(dataset4)
 
     # create more sparse instances
