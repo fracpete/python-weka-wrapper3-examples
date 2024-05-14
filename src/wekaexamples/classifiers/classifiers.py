@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # classifiers.py
-# Copyright (C) 2014-2019 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import traceback
@@ -82,6 +82,8 @@ def main():
     print(classifier.graph)
     print(classifier.to_source("MyJ48"))
     plot_graph.plot_dot_graph(classifier.graph)
+    print("additional measures:", classifier.additional_measures)
+    print("measureTreeSize:", classifier.additional_measure("measureTreeSize"))
 
     # evaluate model on test set
     helper.print_title("Evaluating J48 classifier on iris")
