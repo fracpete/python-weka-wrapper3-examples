@@ -12,15 +12,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # serialization.py
-# Copyright (C) 2014-2021 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import pickle
 import tempfile
 import traceback
-import javabridge
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
+from weka.core.classes import is_instance_of
 from weka.core.converters import Loader
 from weka.core.dataset import Instances
 from weka.classifiers import Classifier
@@ -56,9 +56,9 @@ def main():
     objects = serialization_read_all(outfile)
     for i, obj in enumerate(objects):
         helper.print_info("Object #" + str(i+1) + ":")
-        if javabridge.get_env().is_instance_of(obj, javabridge.get_env().find_class("weka/core/Instances")):
+        if is_instance_of(obj, "weka.core.Instances"):
             obj = Instances(jobject=obj)
-        elif javabridge.get_env().is_instance_of(obj, javabridge.get_env().find_class("weka/classifiers/Classifier")):
+        elif is_instance_of(obj, "weka.classifiers.Classifier"):
             obj = Classifier(jobject=obj)
         print(obj)
 
