@@ -7,8 +7,6 @@ python-weka-wrapper3 can be run in Google's COLAB as well.
 Use the following minimal instructions to install python-weka-wrapper3 in a COLAB Python 3 environment:
 
 ```
-!pip install numpy
-!pip install python-javabridge
 !pip install python-weka-wrapper3
 ```
 
