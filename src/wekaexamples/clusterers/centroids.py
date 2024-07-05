@@ -42,7 +42,7 @@ def main():
 
     # jwrapper approach to get centroids
     print("jwrapper")
-    centroids = cls.jwrapper.getClusterCentroids()
+    centroids = cls.jobject.getClusterCentroids()
     for i in range(centroids.numInstances()):
         print(centroids.instance(i))
 

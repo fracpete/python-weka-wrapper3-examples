@@ -273,7 +273,7 @@ def main():
     helper.print_title("Using JRip's Java API to access rules")
     jrip = Classifier(classname="weka.classifiers.rules.JRip")
     jrip.build_classifier(labor_data)
-    rset = jrip.jwrapper.getRuleset()
+    rset = jrip.jobject.getRuleset()
     for i in range(rset.size()):
         r = rset.get(i)
         print(str(r.toString(labor_data.class_attribute.jobject)))

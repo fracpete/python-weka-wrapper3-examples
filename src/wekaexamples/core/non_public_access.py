@@ -12,9 +12,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # non_public_access.py
-# Copyright (C) 2022 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2022-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
-import javabridge
 import os
 import traceback
 
@@ -39,7 +38,7 @@ def main():
     # let's retrieve that random integer via the private method "value"
     value = get_non_public_field(pf, "value")
     jvalue = JavaObject(value)
-    print(jvalue.jwrapper.intValue())
+    print(jvalue.jobject.intValue())
 
     # PrivateMethod instance gets instantiated with a random integer
     helper.print_info("Accessing private method")
@@ -47,12 +46,12 @@ def main():
     # let's retrieve that random integer via the private method "getValue"
     value = call_non_public_method(pm, "getValue")
     jvalue = JavaObject(value)
-    print(jvalue.jwrapper.intValue())
+    print(jvalue.jobject.intValue())
     # let's retrieve that random integer via the private method "getValueArg"
     # which also requires an int argument
     value = call_non_public_method(pm, "getValueArg", ["int"], [123])
     jvalue = JavaObject(value)
-    print(jvalue.jwrapper.intValue())
+    print(jvalue.jobject.intValue())
 
     # access m_root of a built J48
     helper.print_info("Accessing private field of J48")
@@ -64,8 +63,8 @@ def main():
     root = get_non_public_field(cls.jobject, "m_root")
     jroot = JavaObject(root)
     print(jroot.classname)
-    print(jroot.jwrapper.field_names)
-    print(jroot.jwrapper.methods)
+    print(jroot.jobject.field_names)
+    print(jroot.jobject.methods)
 
     # Accessing protected matricesDilca field of the DilcaDistance class
     helper.print_info("Accessing private field of DilcaDistance")
@@ -84,8 +83,7 @@ def main():
     df.instances = data
     o = get_non_public_field(df.jobject, "matricesDilca")
     print(o)
-    v = javabridge.get_collection_wrapper(o)
-    for item in v:
+    for item in o:
         mat = jdouble_matrix_to_ndarray(item)
         print(mat)
 

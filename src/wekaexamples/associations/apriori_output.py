@@ -49,7 +49,7 @@ def main(args):
     # iterate association rules (low-level)
     helper.print_info("Rules (low-level)")
     # make the underlying rules list object iterable in Python
-    rules = apriori.jwrapper.getAssociationRules().getRules()
+    rules = apriori.jobject.getAssociationRules().getRules()
     for i, r in enumerate(rules):
         # wrap the Java object to make its methods accessible
         rule = JObject(r)

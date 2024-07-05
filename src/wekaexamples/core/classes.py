@@ -12,7 +12,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # classes.py
-# Copyright (C) 2014 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
 import traceback
 import weka.core.jvm as jvm
@@ -28,9 +28,8 @@ def main():
     # generic JavaObject stuff
     helper.print_title("Generic stuff using weka.core.SystemInfo")
     info = JavaObject(JavaObject.new_instance("weka.core.SystemInfo"))
-    jwrapper = info.jwrapper
     print("toString() method:")
-    print(jwrapper.toString())
+    print(info.jobject.toString())
 
     # random
     helper.print_title("Random")
