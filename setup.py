@@ -23,7 +23,7 @@ setup(
     long_description=
     "Examples for the python-weka-wrapper3 library. "
     + "Some examples are modelled after the Examples for Weka, located here: "
-    + "https://svn.cms.waikato.ac.nz/svn/weka/trunk/wekaexamples/",
+    + "https://git.cms.waikato.ac.nz/weka/weka/-/tree/main/trunk/wekaexamples",
     url="https://github.com/fracpete/python-weka-wrapper3-examples",
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -43,10 +43,10 @@ setup(
         "wekaexamples.classifiers",
         "wekaexamples.core"
     ],
-    version="0.2.15",
+    version="0.3.0",
     author='Peter "fracpete" Reutemann',
     author_email='pythonwekawrapper at gmail dot com',
     install_requires=[
-        "python-weka-wrapper3>=0.2.11",
+        "python-weka-wrapper3>=0.3.0",
     ],
 )

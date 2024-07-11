@@ -4,14 +4,14 @@ Example code for the [python-weka-wrapper3](https://github.com/fracpete/python-w
 
 Some of the examples are modelled after the original Examples for Weka:
 
-https://svn.cms.waikato.ac.nz/svn/weka/trunk/wekaexamples/
+https://git.cms.waikato.ac.nz/weka/weka/-/tree/main/trunk/wekaexamples
 
 
 Requirements:
 
 * Python 3
-  * python-weka-wrapper3 (>= 0.1.0)
-* JDK 8 or later (OpenJDK 11 recommended)
+  * python-weka-wrapper3 (>= 0.3.0)
+* JDK 11 or later (OpenJDK 11 recommended)
 
 The Python libraries you can either install using `pip install <name>` or use
 pre-built packages available for your platform.

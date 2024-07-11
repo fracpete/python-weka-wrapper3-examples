@@ -12,9 +12,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # centroids.py
-# Copyright (C) 2022 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2022-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
-import javabridge
 import os
 import traceback
 import weka.core.jvm as jvm
@@ -43,13 +42,13 @@ def main():
 
     # jwrapper approach to get centroids
     print("jwrapper")
-    centroids = cls.jwrapper.getClusterCentroids()
+    centroids = cls.jobject.getClusterCentroids()
     for i in range(centroids.numInstances()):
         print(centroids.instance(i))
 
     # jni/pww approach to get centroids
     print("jni/pww")
-    centroids = Instances(javabridge.call(cls.jobject, "getClusterCentroids", "()Lweka/core/Instances;"))
+    centroids = Instances(cls.jobject.getClusterCentroids())
     for i in range(centroids.num_instances):
         print(centroids.get_instance(i))
 

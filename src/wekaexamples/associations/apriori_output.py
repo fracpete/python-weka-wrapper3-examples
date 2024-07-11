@@ -12,17 +12,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # apriori_output.py
-# Copyright (C) 2014-2018 Fracpete (pythonwekawrapper at gmail dot com)
+# Copyright (C) 2014-2024 Fracpete (pythonwekawrapper at gmail dot com)
 
 import os
 import sys
 import traceback
 import weka.core.jvm as jvm
 import wekaexamples.helper as helper
+from jpype import JObject
 from weka.core.converters import Loader
 from weka.associations import Associator
-import javabridge
-from javabridge import JWrapper
 
 
 def main(args):
@@ -50,10 +49,10 @@ def main(args):
     # iterate association rules (low-level)
     helper.print_info("Rules (low-level)")
     # make the underlying rules list object iterable in Python
-    rules = javabridge.iterate_collection(apriori.jwrapper.getAssociationRules().getRules().o)
+    rules = apriori.jobject.getAssociationRules().getRules()
     for i, r in enumerate(rules):
         # wrap the Java object to make its methods accessible
-        rule = JWrapper(r)
+        rule = JObject(r)
         print(str(i+1) + ". " + str(rule))
         # output some details on rule
         print("   - consequence support: " + str(rule.getConsequenceSupport()))
