@@ -18,5 +18,5 @@ Use the following minimal instructions to install python-weka-wrapper3 in a COLA
 ## Examples
 
 Below are some example notebooks:
-* [associator_hotspot](https://colab.research.google.com/drive/16PwUXZywqW_GWJL2ymJw6goFTZpFIVbv?usp=sharing)
-* [experiments](https://colab.research.google.com/drive/1A9bZkPvXPAViipan7u9siQfkakChyYFV?usp=sharing)
+* [associator_hotspot](https://colab.research.google.com/drive/10KTYZ1-1eZajf11706iR4hr0ARaqIaJT?usp=drive_link)
+* [experiments](https://colab.research.google.com/drive/1N0cQd1Ax-6EcjAxP8QlBT2Xpj_AKr2MQ?usp=drive_link)
